@@ -1,0 +1,160 @@
+.movies-list-container {
+  background-color: $dark-grey;
+  display: flex;
+  padding: 50px;
+  flex-wrap: wrap;
+
+  a {
+    display: flex;
+    margin-bottom: 30px;
+    width: 25%;
+  }
+
+  &__no-results{
+    margin: 70px auto;
+    font-size: 35px;
+    color: $white;
+  }
+}
+
+.movie-dashboard-item {
+  color: $white;
+  margin: 10px;
+  text-decoration: none;
+  width: 100%;
+
+  &__image {
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  &__data {
+    position: relative;
+  }
+
+  &__title {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  &__genres {
+    font-size: 12px;
+  }
+
+  &__year {
+    border: 0.5px solid $white;
+    border-radius: 2px;
+    font-size: 12px;
+    position: absolute;
+    top: 0;
+    padding: 3px 10px;
+    right: 0;
+  }
+}
+
+.movie-page-container {
+  &__back {
+    cursor: pointer;
+    position: absolute;
+    right: 50px;
+    top: 35px;
+
+    img {
+      height: 20px;
+      width: 20px;
+    }
+  }
+}
+
+.movie-container {
+  background-image: url("../sources/search-background.png");
+  display: flex;
+  color: $white;
+  justify-content: center;
+  padding: 80px 60px;
+  width: 100%;
+
+  &__logo {
+    position: absolute;
+    left: 50px;
+    top: 35px;
+    width: 80px;
+  }
+
+  &__image {
+    margin-right: 30px;
+    width: 200px;
+  }
+
+  &__title-block {
+    align-items: center;
+    display: flex;
+    margin-bottom: 10px;
+    width: 100%;
+  }
+
+  &__title-block-title {
+    font-size: 35px;
+    margin-right: 20px;
+  }
+
+  &__title-block-votes-avg {
+    border: 1px solid $white;
+    border-radius: 30px;
+    color: $green;
+    font-size: 25px;
+    padding: 10px;
+    width: 55px;
+    height: 55px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__slogan {
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  &__year-block {
+    color: $red;
+    font-size: 25px;
+    margin-bottom: 20px;
+    width: 100%;
+  }
+
+  &__title-block-year {
+    margin-right: 20px;
+  }
+
+  &__description {
+    width: 100%;
+  }
+}
+
+.movies-suggestions-container {
+  background-color: $dark-grey;
+
+  &__header {
+    align-items: center;
+    background-color: $grey;
+    color: $white;
+    display: flex;
+    font-size: bold;
+    padding: 20px 50px;
+    width: 100%;
+  }
+
+  &__suggestions {
+    display: flex;
+    padding: 60px;
+    flex-wrap: wrap;
+    width: 100%;
+
+    a {
+      display: flex;
+      margin-bottom: 30px;
+      width: 25%;
+    }
+  }
+}

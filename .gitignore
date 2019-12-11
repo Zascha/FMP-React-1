@@ -1,0 +1,6 @@
+log/
+node_modules/
+bin/
+app/
+debug.log
+package-lock.json

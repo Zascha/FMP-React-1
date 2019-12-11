@@ -1,0 +1,48 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#container {
+  font-family: OpenSans;
+  font-size: 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+
+  @media only screen and (max-width: $tablet-size) {
+    width: 95%;
+  }
+
+  &::-webkit-scrollbar {
+    background-color: $grey;
+    width: 5px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $red;
+    border-radius: 5px;
+
+    &:hover {
+      background-color: $dark-red;
+    }
+  }
+
+  .footer{
+    align-items: center;
+    background-color: $grey;
+    display: flex;;
+    justify-content: center;
+    padding: 20px;
+
+    img{
+      width: 80px;
+    }
+  }
+}
