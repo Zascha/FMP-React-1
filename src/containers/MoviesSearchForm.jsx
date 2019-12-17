@@ -19,24 +19,36 @@ class MoviesSearchForm extends Component {
             sortField: queryParams.get('sortBy'),
             currentPage: queryParams.get('page') ? parseInt(queryParams.get('page')) : 1,
         }
+
         this.updateStateSearchValue = this.updateStateSearchValue.bind(this);
         this.updateStateSearchFieldValue = this.updateStateSearchFieldValue.bind(this);
         this.updateStateSortFieldValue = this.updateStateSortFieldValue.bind(this);
     }
 
     componentDidMount() {
-        const { onSetCurrentPage, onSearchPageMovies } = this.props;
-        var searchParams = new SearchParams(this.state.currentPage, this.state.search, this.state.searchField, this.state.sortField);
+        this.searchPageMoviesOnPageLoad();
 
-        onSetCurrentPage(this.currentPage);
-        onSearchPageMovies(searchParams);
+        var searchField = this.state.searchField;
 
-        $(".search-form-button").click(function(){
-            $(this).siblings(".search-form-button").each(function(){
+        $("document").ready(function(){
+            $('.search-form-container__search-by-filter .search-form-button').each(() =>{
+                $(this).removeClass('selected');
+                //if($(this).attr('data-value') == searchField){
+                 //   $(this).addClass('selected');
+                //}
+            });
+        });
+
+        $(".search-form-button").click(function () {
+            $(this).siblings(".search-form-button").each(function () {
                 $(this).removeClass('selected');
             });
             $(this).addClass('selected');
         });
+    }
+
+    componentDidUpdate(){
+        this.searchPageMoviesOnPageLoad();
     }
 
     updateStateSearchValue({ target }) {
@@ -57,37 +69,65 @@ class MoviesSearchForm extends Component {
         });
     }
 
-    searchData() {
+    searchPageMoviesOnPageLoad(){
         const { onSetCurrentPage, onSearchPageMovies } = this.props;
-        var searchParams = new SearchParams(1, this.state.search, this.state.searchField, this.state.sortField);
-        onSetCurrentPage(1);
-        onSearchPageMovies(searchParams);
+        var searchParams = new SearchParams(this.state.currentPage, this.state.search, this.state.searchField, this.state.sortField);
 
-        this.searchValue = "";
+        onSetCurrentPage(this.currentPage);
+        onSearchPageMovies(searchParams);
     }
 
-    searchDataByEnter(e) {
+    runSearchBySubmitSearchValue() {
+        const { onSetCurrentPage } = this.props;
+
+        this.props.history.push({
+            pathname: '/films',
+            search: this.getRedirectUrl('search', this.searchInput.value)
+        });
+
+        onSetCurrentPage(1);
+        this.searchInput.value = "";
+    }
+
+    runSearchBySubmitSearchValueByEnter(e) {
         if (e.key === 'Enter') {
-            this.searchData();
+            this.runSearchBySubmitSearchValue();
         }
     }
 
-    searchDataBy(searchField) {
+    runSearchWithSearchFieldSet(searchField) {
         this.updateStateSearchFieldValue(searchField);
 
-        const { onSetCurrentPage, onSearchPageMovies } = this.props;
-        var searchParams = new SearchParams(1, this.state.search, searchField, this.state.sortField);
+        const { onSetCurrentPage } = this.props;
+
+        this.props.history.push({
+            pathname: '/films',
+            search: this.getRedirectUrl('searchBy', searchField)
+        });
+
         onSetCurrentPage(1);
-        onSearchPageMovies(searchParams);
     }
 
-    searchSortedData(sortField) {
+    runSearchWithSortFieldSet(sortField) {
         this.updateStateSortFieldValue(sortField);
-        
-        const { onSetCurrentPage, onSearchPageMovies } = this.props;
-        var searchParams = new SearchParams(1, this.state.search, this.state.searchField, sortField);
+
+        const { onSetCurrentPage } = this.props;
+
+        this.props.history.push({
+            pathname: '/films',
+            search: this.getRedirectUrl('sortBy', sortField)
+        });
+
         onSetCurrentPage(1);
-        onSearchPageMovies(searchParams);
+    }
+
+    getRedirectUrl(param, value){
+        var searchUrl = this.props.location.search;
+        var regex = new RegExp('(?<=' + param + '=)[a-z_]+');
+
+        return searchUrl.includes(param)
+        ? searchUrl.replace(regex, value)
+        : searchUrl +'&' + param + '=' + value;
     }
 
     render = () => {
@@ -98,15 +138,17 @@ class MoviesSearchForm extends Component {
                 <div className="search-form-container__top">
                     <div className="search-form-container__search-input-text">Find your movie</div>
                     <div className="search-form-container__search-input">
-                        <input type="text" placeholder="Search movie"
-                               onChange={this.updateStateSearchValue.bind(this)}
-                               onKeyPress={this.searchDataByEnter.bind(this)} />
-                        <button type="button" onClick={this.searchData.bind(this)}>Search </button>
+                        <input type="text" placeholder="Search movie" 
+                                onChange={this.updateStateSearchValue.bind(this)}
+                                onKeyPress={this.runSearchBySubmitSearchValueByEnter.bind(this)} />
+                        <button type="button" onClick={this.runSearchBySubmitSearchValue.bind(this)}>Search </button>
                     </div>
                     <div className="search-form-container__search-by-filter">
                         <div className="search-form-info">Search by</div>
-                        <button className="search-form-button selected" type="button" onClick={() => this.searchDataBy(consts.jsonMovieObjectTitleKey)}>Title </button>
-                        <button className="search-form-button" type="button" onClick={() => this.searchDataBy(consts.jsonMovieObjectGenresKey)}>Genre </button>
+                        <button className="search-form-button selected" data-value="title" type="button"
+                                onClick={() => this.runSearchWithSearchFieldSet(consts.jsonMovieObjectTitleKey)}>Title </button>
+                        <button className="search-form-button" data-value="genres" type="button"
+                                onClick={() => this.runSearchWithSearchFieldSet(consts.jsonMovieObjectGenresKey)}>Genre </button>
                     </div>
                 </div>
                 <div className="search-form-container__bottom">
@@ -115,8 +157,8 @@ class MoviesSearchForm extends Component {
                     </div>
                     <div className="search-form-container__sort-by-filter" >
                         <div className="search-form-info">Sort by</div>
-                        <button className="search-form-button" type="button" onClick={() => this.searchSortedData(consts.jsonMovieObjectReleaseDateKey)}>Release date </button>
-                        <button className="search-form-button selected" type="button" onClick={() => this.searchSortedData(consts.jsonMovieObjectVotesAvgKey)}>Rating </button>
+                        <button className="search-form-button" type="button" onClick={() => this.runSearchWithSortFieldSet(consts.jsonMovieObjectReleaseDateKey)}>Release date </button>
+                        <button className="search-form-button selected" type="button" onClick={() => this.runSearchWithSortFieldSet(consts.jsonMovieObjectVotesAvgKey)}>Rating </button>
                     </div>
                 </div>
             </div>

@@ -7,13 +7,4 @@ function moviesList(state = [], action) {
     }
 };
 
-function moviesSuggestionsList(state = [], action) {
-    switch (action.type) {
-        case 'SET_MOVIES__SUGGESTIONS':
-            return action.movies;
-        default:
-            return state;
-    }
-};
-
 export default moviesList;
